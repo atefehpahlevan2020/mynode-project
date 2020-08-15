@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%- defineContent('title') || 'welcome|*Nooshin*' %></title>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-rtl.min.css"/>
+    <link rel='stylesheet' href='/css/vazir.css'/>
+    <% if(req.getLocale() == 'fa') { %> 
+        <link rel='stylesheet' href='/css/home.css'/>
+    <% } else if(req.getLocale() == 'en') { %> 
+        <link rel='stylesheet' href='/css/home-en.css'/>
+    <% } %>
+    <%- style %>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">اپلیکیشن آموزشی فروشگاهی</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">صفحه اصلی</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/courses">دوره ها</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about-me">درباره ما</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <% if(req.getLocale() == 'fa') { %>
+                        <li><a href="/lang/en" class="btn btn-info btn-sm ml-2">نمایش ورژن انگلیسی</a></li>
+                    <% } else if(req.getLocale() == 'en') { %> 
+                        <li><a href="/lang/fa" class="btn btn-info btn-sm ml-2">نمایش ورژن فارسی</a></li>
+                    <% } %>
+                    <% if(auth.check) { %>
+                        <li>
+                            <a href="/user/panel" class="btn btn-success btn-sm ml-2">پنل کاربری</a>
+                        </li>
+                        <li>
+                            <a href="/logout" class="btn btn-danger btn-sm">خروج</a>
+                        </li>
+                    <% } else { %>
+                        <li>
+                            <a href="/auth/login" class="btn btn-success btn-sm ml-2">ورود</a>
+                        </li>
+                        <li>
+                            <a href="/auth/register" class="btn btn-primary btn-sm">عضویت</a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <%- body %>
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/sweetalert2@9.js"></script>
+    <% let sweetalert = req.flash('sweetalert') 
+        if(sweetalert.length) {
+        let data = sweetalert[0]  %>  
+        <script>
+            Swal.fire({
+                title: '<%= data.title %>',
+                text: '<%= data.message %>',
+                type: '<%= data.type %>',
+                showConfirmButton: <%= data.button !== null ? true : false %>,
+                confirmButtonText: '<%= data.button %>',
+                timer: <%= data.button !== null ? 'null' : data.timer %>,
+            })
+        </script>
+    <% } %>
+    <%- script %>
+</body>
+</html>
